@@ -72,7 +72,7 @@
 // -------------------------------------------------
 
 void setup() {
-  SerialBT.begin(9600);
+  SerialBT.begin(String(9600));
   delay(500);
 
   // Startup all pins and UART
