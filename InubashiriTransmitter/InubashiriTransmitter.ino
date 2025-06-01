@@ -5,6 +5,7 @@
 #include "LoRa_E220.h"
 #include<TinyGPSPlus.h>
 #include<SoftwareSerial.h>
+#include<HardwareSerial.h>
 
 TinyGPSPlus gps;
 
@@ -25,15 +26,24 @@ TinyGPSPlus gps;
 // D8, GPIO8
 // D9, GPIO9
 // D10, GPIO10
-SoftwareSerial ss(D7, D10);
-SoftwareSerial mySerial(D0, D1); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
-LoRa_E220 e220ttl(&mySerial, D2, D4, D3); // AUX M0 M1
+SoftwareSerial ss(20, 10); //(D7, D10)
+//#define MYSERIAL_TX 2
+//#define MYSERIAL_RX 3
+//EspSoftwareSerial::UART mySerial;
+//SoftwareSerial mySerial(2, 3); //(D0, D1) // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
+//LoRa_E220 e220ttl(&mySerial, 4, 6, 5); //(&mySerial, D2, D4, D3) // AUX M0 M1
+//LoRa_E220 e220ttl(2, 3, 4, 6, 5); //(D0, D1, D2, D4, D3) // RX, TX, AUX M0 M1
+//LoRa_E220 e220ttl(&Serial, 4, 6, 5); //(&mySerial, D2, D4, D3) // AUX M0 M1
+//LoRa_E220 e220ttl(&Serial1, 4, 6, 5); //(&mySerial, D2, D4, D3) // AUX M0 M1
+HardwareSerial mySerial(1);
+LoRa_E220 e220ttl(&mySerial, 4, 6, 5); //(&mySerial, D2, D4, D3) // AUX M0 M1
 
 void setup() {
   Serial.begin(9600); 
   e220ttl.begin();
-    mySerial.begin(9600);
-    ss.begin(9600);
+  //mySerial.begin(9600);
+  //mySerial.begin(9600, SWSERIAL_8N1, 2, 3, false);
+  ss.begin(9600);
   delay(500);
   e220ttl.sendMessage("hello");
 
