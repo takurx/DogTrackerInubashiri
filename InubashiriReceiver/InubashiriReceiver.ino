@@ -9,14 +9,14 @@
  *
  * https://www.mischianti.org
  *
- * E220		  ----- WeMos D1 mini	----- esp32			----- Arduino Nano 33 IoT	----- Arduino MKR	----- Raspberry Pi Pico   ----- stm32               ----- ArduinoUNO
- * M0         ----- D7 (or GND) 	----- 19 (or GND) 	----- 4 (or GND) 			----- 2 (or GND) 	----- 10 (or GND)	      ----- PB0 (or GND)        ----- 7 Volt div (or GND)
- * M1         ----- D6 (or GND) 	----- 21 (or GND) 	----- 6 (or GND) 			----- 4 (or GND) 	----- 11 (or GND)	      ----- PB10 (or GND)       ----- 6 Volt div (or GND)
- * TX         ----- D3 (PullUP)		----- TX2 (PullUP)	----- TX1 (PullUP)			----- 14 (PullUP)	----- 8 (PullUP)	      ----- PA2 TX2 (PullUP)    ----- 4 (PullUP)
- * RX         ----- D4 (PullUP)		----- RX2 (PullUP)	----- RX1 (PullUP)			----- 13 (PullUP)	----- 9 (PullUP)	      ----- PA3 RX2 (PullUP)    ----- 5 Volt div (PullUP)
- * AUX        ----- D5 (PullUP)		----- 18  (PullUP)	----- 2  (PullUP)			----- 0  (PullUP)	----- 2  (PullUP)	      ----- PA0  (PullUP)       ----- 3 (PullUP)
- * VCC        ----- 3.3v/5v			----- 3.3v/5v		----- 3.3v/5v				----- 3.3v/5v		----- 3.3v/5v		      ----- 3.3v/5v             ----- 3.3v/5v
- * GND        ----- GND				----- GND			----- GND					----- GND			----- GND			      ----- GND                 ----- GND
+ * E220		  ----- WeMos D1 mini	----- esp32			       ----- Arduino Nano 33 IoT	----- Arduino MKR	----- Raspberry Pi Pico   ----- stm32               ----- ArduinoUNO
+ * M0       ----- D7 (or GND) 	----- 19 (or GND) 	   ----- 4 (or GND) 			    ----- 2 (or GND) 	----- 10 (or GND)	        ----- PB0 (or GND)        ----- 7 Volt div (or GND)
+ * M1       ----- D6 (or GND) 	----- 21 (or GND) 	   ----- 6 (or GND) 			    ----- 4 (or GND) 	----- 11 (or GND)	        ----- PB10 (or GND)       ----- 6 Volt div (or GND)
+ * TX       ----- D3 (PullUP)		----- 17, TX2 (PullUP) ----- TX1 (PullUP)			  ----- 14 (PullUP)	----- 8 (PullUP)	        ----- PA2 TX2 (PullUP)    ----- 4 (PullUP)
+ * RX       ----- D4 (PullUP)		----- 16, RX2 (PullUP) ----- RX1 (PullUP)			  ----- 13 (PullUP)	----- 9 (PullUP)	        ----- PA3 RX2 (PullUP)    ----- 5 Volt div (PullUP)
+ * AUX      ----- D5 (PullUP)		----- 18  (PullUP)	   ----- 2  (PullUP)			    ----- 0  (PullUP)	----- 2  (PullUP)	        ----- PA0  (PullUP)       ----- 3 (PullUP)
+ * VCC      ----- 3.3v/5v			  ----- 3.3v/5v		       ----- 3.3v/5v				      ----- 3.3v/5v		  ----- 3.3v/5v		          ----- 3.3v/5v             ----- 3.3v/5v
+ * GND      ----- GND				    ----- GND			         ----- GND					        ----- GND			    ----- GND			            ----- GND                 ----- GND
  *
  */
 
@@ -56,6 +56,9 @@
 // -------------------------------------------------
 
 // ---------- esp32 pins --------------
+// esp32 serial2 RX GPIO16
+// esp32 serial2 TX GPIO17
+
  LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
  BluetoothSerial SerialBT;
 
@@ -72,7 +75,7 @@
 // -------------------------------------------------
 
 void setup() {
-  SerialBT.begin(9600);
+  SerialBT.begin(String(9600));
   delay(500);
 
   // Startup all pins and UART
