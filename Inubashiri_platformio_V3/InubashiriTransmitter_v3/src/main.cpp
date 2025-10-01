@@ -33,6 +33,7 @@ LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 //LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
 // -------------------------------------
 
+unsigned int counter = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -45,7 +46,8 @@ void setup() {
 }
 
 void loop() {
-  e220ttl.sendMessage("Hello from ESP32 receiver!");
+  e220ttl.sendMessage("Hello from ESP32 receiveraaaaaa!\n");
+  e220ttl.sendMessage("counter: " + String(counter++));
   delay(1000);
 
 //   // If something available
