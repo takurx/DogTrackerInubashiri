@@ -9,24 +9,23 @@
  *
  * https://www.mischianti.org
  *
- * E220		  ----- WeMos D1 mini	----- esp32			       ----- Arduino Nano 33 IoT	----- Arduino MKR	----- Raspberry Pi Pico   ----- stm32               ----- ArduinoUNO
- * M0       ----- D7 (or GND) 	----- 19 (or GND) 	   ----- 4 (or GND) 			    ----- 2 (or GND) 	----- 10 (or GND)	        ----- PB0 (or GND)        ----- 7 Volt div (or GND)
- * M1       ----- D6 (or GND) 	----- 21 (or GND) 	   ----- 6 (or GND) 			    ----- 4 (or GND) 	----- 11 (or GND)	        ----- PB10 (or GND)       ----- 6 Volt div (or GND)
- * TX       ----- D3 (PullUP)		----- 17, TX2 (PullUP) ----- TX1 (PullUP)			  ----- 14 (PullUP)	----- 8 (PullUP)	        ----- PA2 TX2 (PullUP)    ----- 4 (PullUP)
- * RX       ----- D4 (PullUP)		----- 16, RX2 (PullUP) ----- RX1 (PullUP)			  ----- 13 (PullUP)	----- 9 (PullUP)	        ----- PA3 RX2 (PullUP)    ----- 5 Volt div (PullUP)
- * AUX      ----- D5 (PullUP)		----- 18  (PullUP)	   ----- 2  (PullUP)			    ----- 0  (PullUP)	----- 2  (PullUP)	        ----- PA0  (PullUP)       ----- 3 (PullUP)
- * VCC      ----- 3.3v/5v			  ----- 3.3v/5v		       ----- 3.3v/5v				      ----- 3.3v/5v		  ----- 3.3v/5v		          ----- 3.3v/5v             ----- 3.3v/5v
- * GND      ----- GND				    ----- GND			         ----- GND					        ----- GND			    ----- GND			            ----- GND                 ----- GND
+ * E220		  ----- WeMos D1 mini	----- esp32			----- Arduino Nano 33 IoT	----- Arduino MKR	----- Raspberry Pi Pico   ----- stm32               ----- ArduinoUNO
+ * M0         ----- D7 (or GND) 	----- 19 (or GND) 	----- 4 (or GND) 			----- 2 (or GND) 	----- 10 (or GND)	      ----- PB0 (or GND)        ----- 7 Volt div (or GND)
+ * M1         ----- D6 (or GND) 	----- 21 (or GND) 	----- 6 (or GND) 			----- 4 (or GND) 	----- 11 (or GND)	      ----- PB10 (or GND)       ----- 6 Volt div (or GND)
+ * TX         ----- D3 (PullUP)		----- TX2 (PullUP)	----- TX1 (PullUP)			----- 14 (PullUP)	----- 8 (PullUP)	      ----- PA2 TX2 (PullUP)    ----- 4 (PullUP)
+ * RX         ----- D4 (PullUP)		----- RX2 (PullUP)	----- RX1 (PullUP)			----- 13 (PullUP)	----- 9 (PullUP)	      ----- PA3 RX2 (PullUP)    ----- 5 Volt div (PullUP)
+ * AUX        ----- D5 (PullUP)		----- 18  (PullUP)	----- 2  (PullUP)			----- 0  (PullUP)	----- 2  (PullUP)	      ----- PA0  (PullUP)       ----- 3 (PullUP)
+ * VCC        ----- 3.3v/5v			----- 3.3v/5v		----- 3.3v/5v				----- 3.3v/5v		----- 3.3v/5v		      ----- 3.3v/5v             ----- 3.3v/5v
+ * GND        ----- GND				----- GND			----- GND					----- GND			----- GND			      ----- GND                 ----- GND
  *
  */
 
 // If you want use RSSI uncomment
 //#define ENABLE_RSSI true
 
-
-#include "Arduino.h"
-#include "LoRa_E220.h"
-#include "BluetoothSerial.h"
+#include <Arduino.h>
+#include <LoRa_E220.h>
+#include <BluetoothSerial.h>
 
 // ---------- esp8266 pins --------------
 //LoRa_E220 e220ttl(RX, TX, AUX, M0, M1);  // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
@@ -56,11 +55,8 @@
 // -------------------------------------------------
 
 // ---------- esp32 pins --------------
-// esp32 serial2 RX GPIO16
-// esp32 serial2 TX GPIO17
-
- LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
- BluetoothSerial SerialBT;
+LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
+BluetoothSerial SerialBT;
 
 //LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
 // -------------------------------------
@@ -75,7 +71,7 @@
 // -------------------------------------------------
 
 void setup() {
-  SerialBT.begin(String(9600));
+  SerialBT.begin(9600);
   delay(500);
 
   // Startup all pins and UART
@@ -85,26 +81,26 @@ void setup() {
 }
 
 void loop() {
-	// If something available
-  if (e220ttl.available()>1) {
-	  SerialBT.println("Message received!");
+  // If something available
+  if (e220ttl.available() > 1) {
+    SerialBT.println("Message received!");
 
-	  // read the String message
+    // read the String message
 #ifdef ENABLE_RSSI
-	ResponseContainer rc = e220ttl.receiveMessageRSSI();
+    ResponseContainer rc = e220ttl.receiveMessageRSSI();
 #else
-	ResponseContainer rc = e220ttl.receiveMessage();
+    ResponseContainer rc = e220ttl.receiveMessage();
 #endif
-	// Is something goes wrong print error
-	if (rc.status.code!=1){
-		SerialBT.println(rc.status.getResponseDescription());
-	}else{
-		// Print the data received
-		SerialBT.println(rc.status.getResponseDescription());
-		SerialBT.println(rc.data);
+    // Is something goes wrong print error
+    if (rc.status.code != 1) {
+      SerialBT.println(rc.status.getResponseDescription());
+    } else {
+      // Print the data received
+      SerialBT.println(rc.status.getResponseDescription());
+      SerialBT.println(rc.data);
 #ifdef ENABLE_RSSI
-		SerialBT.print("RSSI: "); SerialBT.println(rc.rssi, DEC);
+      SerialBT.print("RSSI: "); SerialBT.println(rc.rssi, DEC);
 #endif
-	}
+    }
   }
 }
