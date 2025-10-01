@@ -26,7 +26,7 @@
 
 #include <Arduino.h>
 #include <LoRa_E220.h>
-#include <TimerOne.h>
+//#include <TimerOne.h>
 
 #define LED_BUILTIN 2
 
@@ -38,21 +38,21 @@ LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 
 unsigned int counter = 0;
 
-const int led = LED_BUILTIN;  // the pin with a LED
-int ledState = LOW;
+// const int led = LED_BUILTIN;  // the pin with a LED
+// int ledState = LOW;
 
-void blinkLED(void)
-{
-  if (ledState == LOW) {
-    ledState = HIGH;
-  } else {
-    ledState = LOW;
-  }
-  digitalWrite(led, ledState);
+// void blinkLED(void)
+// {
+//   if (ledState == LOW) {
+//     ledState = HIGH;
+//   } else {
+//     ledState = LOW;
+//   }
+//   digitalWrite(led, ledState);
 
-  e220ttl.sendMessage("Hello from ESP32 receiveraaaaaa!\n");
-  e220ttl.sendMessage("counter: " + String(counter++));
-}
+//   e220ttl.sendMessage("Hello from ESP32 receiveraaaaaa!\n");
+//   e220ttl.sendMessage("counter: " + String(counter++));
+// }
 
 void setup() {
   Serial.begin(9600);
@@ -62,15 +62,22 @@ void setup() {
   e220ttl.begin();
   Serial.println("Start receiving!");
 
-  pinMode(led, OUTPUT);
-  Timer1.initialize(1000000);
-  Timer1.attachInterrupt(blinkLED); // blinkLED to run every 1.0 seconds
+  // pinMode(led, OUTPUT);
+  // Timer1.initialize(1000000);
+  // Timer1.attachInterrupt(blinkLED); // blinkLED to run every 1.0 seconds
 }
 
+unsigned long currentMillis = 0;
+unsigned long previousMillis = 0;
+
 void loop() {
-  // e220ttl.sendMessage("Hello from ESP32 receiveraaaaaa!\n");
-  // e220ttl.sendMessage("counter: " + String(counter++));
-  // delay(1000);
+  currentMillis = millis();
+  if (currentMillis - previousMillis > 1000) {
+    e220ttl.sendMessage("Hello from ESP32 receiveraaaaaa!\n");
+    e220ttl.sendMessage("counter: " + String(counter++));
+    // delay(1000);
+    previousMillis = currentMillis;
+  }
 
   // If something available
   if (e220ttl.available() > 1) {
