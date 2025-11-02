@@ -1,86 +1,50 @@
+/*
+- main.cpp -
+
+ESP32 UART x3
+COM0 RX: RXD0
+COM0 TX: TXD0
+
+COM1 RX: GPIO09 -> modify, GPIO12 -> GNSS TX
+COM1 TX: GPIO10 -> modify, GPIO14 -> GNSS RX
+
+COM2 RX: GPIO16 -> LoRa TX
+COM2 TX: GPIO17 -> LoRa RX
+
+- ~/.platformio/packages/framework-arduinoespressif32/cores/esp32/HardwareSerial.cpp
+#if CONFIG_IDF_TARGET_ESP32
+#define SOC_RX0 3
+#define SOC_TX0 1
+
+#define RX1 9
+#define TX1 10
+
+#define RX2 16
+#define TX2 17
+
+Simple Serial1 to Serial forwarder
+
+*/
+
 #include <Arduino.h>
-#include <TinyGPSPlus.h>
-
-void displayInfo();
-
-// The TinyGPSPlus object
-TinyGPSPlus gps;
 
 void setup() {
+  // Initialize Serial (USB) for output
   Serial.begin(115200);
   delay(1000);
-  Serial.println("Hello World on Serial, setup");
+  Serial.println("Serial1 to Serial forwarder started");
 
-  Serial2.begin(9600);
+  // Initialize Serial1 (GNSS) for input
+  Serial1.begin(9600, SERIAL_8N1, 12, 14); // Initialize Serial1 (GNSS) for input
+
+  //Serial2.begin(9600); // Initialize Serial2 (LoRa) for input
 }
 
 void loop() {
-  //delay(1000);
-  //Serial.println("Hello World on Serial, loop");
-  // This sketch displays information every time a new sentence is correctly encoded.
-  while (Serial2.available() > 0)
-  {  
-    if (gps.encode(Serial2.read()))
-    {
-      displayInfo();
-    }
+  // Check if data is available on Serial1
+  if (Serial1.available() > 0) {
+    // Read one byte and print it to Serial
+    char receivedChar = Serial1.read();
+    Serial.print(receivedChar);
   }
-
-  if (millis() > 5000 && gps.charsProcessed() < 10)
-  {
-    Serial.println(F("No GPS detected: check wiring."));
-    while(true);
-  }
-  delay(1000);
-}
-
-void displayInfo()
-{
-  Serial.print(F("Location: ")); 
-  if (gps.location.isValid())
-  {
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(F(","));
-    Serial.print(gps.location.lng(), 6);
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.print(F("  Date/Time(UTC): "));
-  if (gps.date.isValid())
-  {
-    Serial.print(gps.date.month());
-    Serial.print(F("/"));
-    Serial.print(gps.date.day());
-    Serial.print(F("/"));
-    Serial.print(gps.date.year());
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.print(F(" "));
-  if (gps.time.isValid())
-  {
-    if (gps.time.hour() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.hour());
-    Serial.print(F(":"));
-    if (gps.time.minute() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.minute());
-    Serial.print(F(":"));
-    if (gps.time.second() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.second());
-    Serial.print(F("."));
-    if (gps.time.centisecond() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.centisecond());
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.println();
 }
