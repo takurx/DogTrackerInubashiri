@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Inubashiri PCB")
-		(date "2025-10-22")
-		(rev "V1")
+		(date "2025-11-03")
+		(rev "V1.1")
 		(company "takurx")
 	)
 	(lib_symbols
@@ -1377,7 +1377,7 @@
 		)
 		(uuid "a0dbf681-a925-44e2-a537-4ff122aac884")
 	)
-	(text "ESP32 UART x3\nCOM0 TX: TXD0\nCOM0 RX: RXD0\nCOM1 TX: GPIO17\nCOM1 RX: GPIO16\nCOM2 TX: GPIO15\nCOM2 RX: GPIO04"
+	(text "ESP32 UART x3\nCOM0 RX: RXD0, GPIO3\nCOM0 TX: TXD0, GPIO1\n\nCOM1 RX: GPIO9  -> GPIO12\nCOM1 TX: GPIO10 -> GPIO14\n\nCOM2 RX: GPIO16\nCOM2 TX: GPIO17"
 		(exclude_from_sim no)
 		(at 179.324 118.618 0)
 		(effects
@@ -1389,22 +1389,10 @@
 		(uuid "ba83bbdd-c845-48e2-b353-698ab2828985")
 	)
 	(junction
-		(at 118.11 57.15)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "08b68ed8-94c3-4784-98ca-ba995ed5ae7b")
-	)
-	(junction
 		(at 158.75 74.93)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1736dc9e-7a91-49f6-bc7a-623eda27d84a")
-	)
-	(junction
-		(at 115.57 59.69)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "184b7431-d4c7-459f-86fa-351630ff629c")
 	)
 	(junction
 		(at 99.06 85.09)
@@ -1431,6 +1419,12 @@
 		(uuid "901ada52-1a41-4414-97a1-2f2b9aee2592")
 	)
 	(junction
+		(at 118.11 57.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bdd49558-af8e-45cd-9481-e6927bc9d91f")
+	)
+	(junction
 		(at 99.06 132.08)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1441,6 +1435,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f02fb0f2-7d88-4839-a42a-dc1d60d07c8a")
+	)
+	(junction
+		(at 115.57 59.69)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fed9f5af-021a-4678-83f9-75bb30969701")
 	)
 	(wire
 		(pts
@@ -1564,6 +1564,16 @@
 	)
 	(wire
 		(pts
+			(xy 115.57 59.69) (xy 93.98 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41ba93c1-4614-4cf1-abb4-bc77ee205c0a")
+	)
+	(wire
+		(pts
 			(xy 99.06 54.61) (xy 99.06 85.09)
 		)
 		(stroke
@@ -1644,26 +1654,6 @@
 	)
 	(wire
 		(pts
-			(xy 171.45 129.54) (xy 151.13 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "56619f21-24e3-4373-964d-76e5ce5c1fd3")
-	)
-	(wire
-		(pts
-			(xy 115.57 90.17) (xy 115.57 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59f4c685-3ea1-4505-b52e-a60f14dc4e89")
-	)
-	(wire
-		(pts
 			(xy 151.13 85.09) (xy 151.13 99.06)
 		)
 		(stroke
@@ -1704,6 +1694,26 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 127) (xy 110.49 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6b370269-838c-41a5-a446-7af64b583c0a")
+	)
+	(wire
+		(pts
+			(xy 96.52 129.54) (xy 110.49 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6bee0cb5-80d0-48a9-a1b5-5cb95f796099")
+	)
+	(wire
+		(pts
 			(xy 106.68 82.55) (xy 106.68 99.06)
 		)
 		(stroke
@@ -1714,13 +1724,13 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 137.16) (xy 168.91 137.16)
+			(xy 96.52 57.15) (xy 96.52 129.54)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7f44ceec-61cf-4169-bc91-6049759c3a31")
+		(uuid "816a97bc-6908-430d-a029-8b6d54987119")
 	)
 	(wire
 		(pts
@@ -1754,16 +1764,6 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 57.15) (xy 118.11 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "91947fc7-6bdb-4b43-bd07-d41ca1e293f7")
-	)
-	(wire
-		(pts
 			(xy 115.57 59.69) (xy 120.65 59.69)
 		)
 		(stroke
@@ -1791,26 +1791,6 @@
 			(type default)
 		)
 		(uuid "ae5aebb2-4995-4785-9dbf-0990474d9243")
-	)
-	(wire
-		(pts
-			(xy 168.91 90.17) (xy 115.57 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b7e22519-db08-498b-9a4b-7ed7f5f86164")
-	)
-	(wire
-		(pts
-			(xy 168.91 137.16) (xy 168.91 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd3728a1-342b-4767-982d-0dd213430b6d")
 	)
 	(wire
 		(pts
@@ -1844,6 +1824,16 @@
 	)
 	(wire
 		(pts
+			(xy 118.11 57.15) (xy 96.52 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cef67e5f-615a-440c-a5c4-5b356a8e57c5")
+	)
+	(wire
+		(pts
 			(xy 151.13 114.3) (xy 166.37 114.3)
 		)
 		(stroke
@@ -1851,16 +1841,6 @@
 			(type default)
 		)
 		(uuid "d0a16b1c-770c-468f-b886-987fa91805e9")
-	)
-	(wire
-		(pts
-			(xy 171.45 87.63) (xy 171.45 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d69bfc67-2b08-4bab-978c-210191624866")
 	)
 	(wire
 		(pts
@@ -1874,13 +1854,13 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 87.63) (xy 171.45 87.63)
+			(xy 93.98 59.69) (xy 93.98 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f7d8ba47-be6b-4944-8fa9-9a6607fe4819")
+		(uuid "dba155e4-bb21-4d46-a714-54abd31dbb77")
 	)
 	(wire
 		(pts
@@ -1924,7 +1904,7 @@
 			)
 		)
 	)
-	(global_label "GPIO15"
+	(global_label "GPIO14"
 		(shape output)
 		(at 115.57 44.45 90)
 		(fields_autoplaced yes)
@@ -1968,7 +1948,7 @@
 			)
 		)
 	)
-	(global_label "GPIO04"
+	(global_label "GPIO12"
 		(shape input)
 		(at 118.11 44.45 90)
 		(fields_autoplaced yes)
