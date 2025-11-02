@@ -2,3 +2,7 @@
 Inubashiri_platformio_V3/InubashiriReceiver/.pio/
 
 Inubashiri_platformio_V3/InubashiriTransmitter/.pio/
+
+Document/git_ignore/
+
+Inubashiri_pcb_V1/Inubashiri_pcb/Inubashiri_pcb-backups/

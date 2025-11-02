@@ -33,6 +33,9 @@ LoRa_E220 e220ttl(&Serial2, 15, 21, 19); //  RX AUX M0 M1
 //LoRa_E220 e220ttl(&Serial2, 22, 4, 18, 21, 19, UART_BPS_RATE_9600); //  esp32 RX <-- e220 TX, esp32 TX --> e220 RX AUX M0 M1
 // -------------------------------------
 
+unsigned int counter = 0;
+unsigned long currentMillis = 0;
+unsigned long previousMillis = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -40,12 +43,17 @@ void setup() {
 
   // Startup all pins and UART
   e220ttl.begin();
-
   Serial.println("Start receiving!");
 }
 
 void loop() {
-  //e220ttl.sendMessage("Hello from ESP32 receiver!");
+  currentMillis = millis();
+  if (currentMillis - previousMillis > 1000) {
+    e220ttl.sendMessage("Hello, I'm receiver side\n");
+    e220ttl.sendMessage("heart beat counter: " + String(counter++));
+    // delay(1000);
+    previousMillis = currentMillis;
+  }
 
   // If something available
   if (e220ttl.available() > 1) {
