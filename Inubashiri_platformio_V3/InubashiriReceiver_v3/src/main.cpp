@@ -38,7 +38,7 @@ unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(500);
 
   // Startup all pins and UART
@@ -49,15 +49,17 @@ void setup() {
 void loop() {
   currentMillis = millis();
   if (currentMillis - previousMillis > 1000) {
-    e220ttl.sendMessage("Hello, I'm receiver side\n");
-    e220ttl.sendMessage("heart beat counter: " + String(counter++));
+    // e220ttl.sendMessage("Hello, I'm receiver side\n");
+    counter++;
+    // Serial.println("heart beat counter (receiver): " + String(counter));
+    //e220ttl.sendMessage("heart beat counter: " + String(counter));
     // delay(1000);
     previousMillis = currentMillis;
   }
 
   // If something available
   if (e220ttl.available() > 1) {
-    Serial.println("Message received!");
+    // Serial.println("Message received!");
 
     // read the String message
 #ifdef ENABLE_RSSI
@@ -67,11 +69,11 @@ void loop() {
 #endif
     // Is something goes wrong print error
     if (rc.status.code != 1) {
-      Serial.println(rc.status.getResponseDescription());
+      //Serial.println(rc.status.getResponseDescription());
     } else {
       // Print the data received
-      Serial.println(rc.status.getResponseDescription());
-      Serial.println(rc.data);
+      //Serial.println(rc.status.getResponseDescription());
+      Serial.print(rc.data);
 #ifdef ENABLE_RSSI
       Serial.print("RSSI: "); Serial.println(rc.rssi, DEC);
 #endif
