@@ -1,0 +1,1 @@
+test_input_data-0.txtのようなデータが/dev/ttyUSB0やCOM6からシリアル入力されるとして、pythonでstreamlitやleafmapを利用して経路と現在位置を可視化するコードを作成してください
