@@ -24,8 +24,8 @@ ESP32 UART x3
 COM0 RX: RXD0
 COM0 TX: TXD0
 
-COM1 RX: GPIO09 -> modify, GPIO12 -> GNSS TX
-COM1 TX: GPIO10 -> modify, GPIO14 -> GNSS RX
+COM1 RX: GPIO09 -> modify, GPIO27 -> GNSS TX
+COM1 TX: GPIO10 -> modify, GPIO26 -> GNSS RX
 
 COM2 RX: GPIO16 -> LoRa TX
 COM2 TX: GPIO17 -> LoRa RX
@@ -71,7 +71,7 @@ void setup() {
   e220ttl.begin(); // Initialize Serial2 (LoRa) for input
   
   // Initialize Serial1 (GNSS) for input
-  Serial1.begin(9600, SERIAL_8N1, 12, 14);
+  Serial1.begin(9600, SERIAL_8N1, 27, 26); // RX, TX
 
   Serial.println("Start receiving!");
 }

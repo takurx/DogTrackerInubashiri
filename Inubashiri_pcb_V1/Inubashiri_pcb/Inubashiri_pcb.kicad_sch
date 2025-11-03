@@ -7,7 +7,7 @@
 	(title_block
 		(title "Inubashiri PCB")
 		(date "2025-11-03")
-		(rev "V1.1")
+		(rev "V1.2")
 		(company "takurx")
 	)
 	(lib_symbols
@@ -1377,7 +1377,7 @@
 		)
 		(uuid "a0dbf681-a925-44e2-a537-4ff122aac884")
 	)
-	(text "ESP32 UART x3\nCOM0 RX: RXD0, GPIO3\nCOM0 TX: TXD0, GPIO1\n\nCOM1 RX: GPIO9  -> GPIO12\nCOM1 TX: GPIO10 -> GPIO14\n\nCOM2 RX: GPIO16\nCOM2 TX: GPIO17"
+	(text "ESP32 UART x3\nCOM0 RX: RXD0, GPIO3\nCOM0 TX: TXD0, GPIO1\n\nCOM1 RX: GPIO9  -> GPIO27, GNSS TX\nCOM1 TX: GPIO10 -> GPIO26, GNSS RX\n\nCOM2 RX: GPIO16\nCOM2 TX: GPIO17"
 		(exclude_from_sim no)
 		(at 179.324 118.618 0)
 		(effects
@@ -1694,26 +1694,6 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 127) (xy 110.49 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6b370269-838c-41a5-a446-7af64b583c0a")
-	)
-	(wire
-		(pts
-			(xy 96.52 129.54) (xy 110.49 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6bee0cb5-80d0-48a9-a1b5-5cb95f796099")
-	)
-	(wire
-		(pts
 			(xy 106.68 82.55) (xy 106.68 99.06)
 		)
 		(stroke
@@ -1721,16 +1701,6 @@
 			(type default)
 		)
 		(uuid "746c4702-2b19-43f0-a1d5-9bff406e857b")
-	)
-	(wire
-		(pts
-			(xy 96.52 57.15) (xy 96.52 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "816a97bc-6908-430d-a029-8b6d54987119")
 	)
 	(wire
 		(pts
@@ -1794,6 +1764,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 121.92) (xy 93.98 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc581ce6-679a-4aa1-8c59-91c4d07e9c41")
+	)
+	(wire
+		(pts
 			(xy 170.18 74.93) (xy 158.75 74.93)
 		)
 		(stroke
@@ -1824,6 +1804,26 @@
 	)
 	(wire
 		(pts
+			(xy 110.49 121.92) (xy 93.98 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5e114d4-2ae5-42f8-bdef-133b29f30645")
+	)
+	(wire
+		(pts
+			(xy 96.52 124.46) (xy 96.52 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c69a5f96-920e-44f4-a531-527afb8507ed")
+	)
+	(wire
+		(pts
 			(xy 118.11 57.15) (xy 96.52 57.15)
 		)
 		(stroke
@@ -1844,6 +1844,16 @@
 	)
 	(wire
 		(pts
+			(xy 110.49 124.46) (xy 96.52 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d52579d3-277c-49c0-89bf-4cdd9c197eba")
+	)
+	(wire
+		(pts
 			(xy 158.75 67.31) (xy 158.75 74.93)
 		)
 		(stroke
@@ -1851,16 +1861,6 @@
 			(type default)
 		)
 		(uuid "d7192cc5-277b-4b6e-8af1-25b9a32a2062")
-	)
-	(wire
-		(pts
-			(xy 93.98 59.69) (xy 93.98 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dba155e4-bb21-4d46-a714-54abd31dbb77")
 	)
 	(wire
 		(pts
@@ -1904,7 +1904,7 @@
 			)
 		)
 	)
-	(global_label "GPIO14"
+	(global_label "GPIO26"
 		(shape output)
 		(at 115.57 44.45 90)
 		(fields_autoplaced yes)
@@ -1948,7 +1948,7 @@
 			)
 		)
 	)
-	(global_label "GPIO12"
+	(global_label "GPIO27"
 		(shape input)
 		(at 118.11 44.45 90)
 		(fields_autoplaced yes)
