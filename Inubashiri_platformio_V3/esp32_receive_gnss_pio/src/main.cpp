@@ -22,20 +22,23 @@ COM2 TX: GPIO17 -> LoRa RX
 #define RX2 16
 #define TX2 17
 
-Simple Serial1 to Serial forwarder
+Simple Serial1 to Serial forwarder - GPGGA sentences only
 
 */
 
 #include <Arduino.h>
 
+String nmeaBuffer = "";
+bool receivingNmea = false;
+
 void setup() {
   // Initialize Serial (USB) for output
   Serial.begin(115200);
   delay(1000);
-  Serial.println("Serial1 to Serial forwarder started");
+  Serial.println("Serial1 to Serial forwarder started (GPGGA only)");
 
   // Initialize Serial1 (GNSS) for input
-  Serial1.begin(9600, SERIAL_8N1, 12, 14); // Initialize Serial1 (GNSS) for input
+  Serial1.begin(9600, SERIAL_8N1, 12, 14);
 
   //Serial2.begin(9600); // Initialize Serial2 (LoRa) for input
 }
@@ -43,8 +46,29 @@ void setup() {
 void loop() {
   // Check if data is available on Serial1
   if (Serial1.available() > 0) {
-    // Read one byte and print it to Serial
     char receivedChar = Serial1.read();
-    Serial.print(receivedChar);
+    
+    // Start of NMEA sentence
+    if (receivedChar == '$') {
+      nmeaBuffer = "$";
+      receivingNmea = true;
+    }
+    // End of NMEA sentence
+    else if (receivedChar == '\n' && receivingNmea) {
+      nmeaBuffer += receivedChar;
+      
+      // Check if it's a GPGGA sentence
+      if (nmeaBuffer.startsWith("$GPGGA")) {
+        Serial.print(nmeaBuffer);
+      }
+      
+      // Reset for next sentence
+      nmeaBuffer = "";
+      receivingNmea = false;
+    }
+    // Middle of NMEA sentence
+    else if (receivingNmea) {
+      nmeaBuffer += receivedChar;
+    }
   }
 }
