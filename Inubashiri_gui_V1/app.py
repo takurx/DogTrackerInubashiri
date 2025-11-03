@@ -34,6 +34,14 @@ if 'data_queue' not in st.session_state:
     st.session_state.data_queue = Queue()
 if 'stop_flag' not in st.session_state:
     st.session_state.stop_flag = threading.Event()
+if 'map_center' not in st.session_state:
+    st.session_state.map_center = None
+if 'map_zoom' not in st.session_state:
+    st.session_state.map_zoom = 17
+if 'last_data_count' not in st.session_state:
+    st.session_state.last_data_count = 0
+if 'map_html' not in st.session_state:
+    st.session_state.map_html = None
 
 def parse_nmea_gpgga(line):
     """
@@ -182,13 +190,19 @@ else:
 st.sidebar.metric("記録ポイント数", len(st.session_state.gps_data))
 
 # キューからデータを取得してセッション状態を更新
+data_updated = False
 while not st.session_state.data_queue.empty():
     msg_type, msg_data = st.session_state.data_queue.get()
     if msg_type == 'data':
         st.session_state.gps_data.append(msg_data)
         st.session_state.current_position = msg_data
+        data_updated = True
     elif msg_type == 'error':
         st.session_state.error_message = msg_data
+
+# データが更新された場合、地図HTMLをクリア
+if data_updated:
+    st.session_state.map_html = None
 
 # エラーメッセージ表示（メインスレッドで）
 if st.session_state.error_message:
@@ -217,46 +231,70 @@ if len(st.session_state.gps_data) > 0:
     # データフレームに変換
     df = pd.DataFrame(list(st.session_state.gps_data))
     
-    # 地図の中心を最新の位置に設定
-    center_lat = df['latitude'].iloc[-1]
-    center_lon = df['longitude'].iloc[-1]
+    # 地図の中心位置を決定（初回または新しいデータの場合は最新位置、それ以外は保存された位置）
+    current_data_count = len(st.session_state.gps_data)
     
-    # Leafmapで地図作成
-    m = leafmap.Map(center=[center_lat, center_lon], zoom=17)
+    # 初回または地図HTMLがない場合のみ地図を作成
+    if st.session_state.map_html is None or st.session_state.last_data_count != current_data_count:
+        # 地図の中心を設定（保存された位置がない場合は最新位置）
+        if st.session_state.map_center is None:
+            center_lat = df['latitude'].iloc[-1]
+            center_lon = df['longitude'].iloc[-1]
+            st.session_state.map_center = [center_lat, center_lon]
+        else:
+            center_lat, center_lon = st.session_state.map_center
+        
+        # Leafmapで地図作成
+        m = leafmap.Map(center=st.session_state.map_center, zoom=st.session_state.map_zoom)
+        
+        # 経路をラインで描画
+        if len(df) > 1:
+            import folium
+            route_coords = [[row['latitude'], row['longitude']] for _, row in df.iterrows()]
+            folium.PolyLine(
+                route_coords,
+                color='blue',
+                weight=3,
+                opacity=0.7,
+                popup='GPS経路'
+            ).add_to(m)
+        
+        # 開始地点マーカー
+        if len(df) > 0:
+            import folium
+            first_point = df.iloc[0]
+            folium.Marker(
+                location=[first_point['latitude'], first_point['longitude']],
+                popup=f"開始地点<br>時刻: {first_point['time']}",
+                icon=folium.Icon(color='green')
+            ).add_to(m)
+        
+        # 現在位置マーカー
+        if st.session_state.current_position:
+            import folium
+            current_lat = df['latitude'].iloc[-1]
+            current_lon = df['longitude'].iloc[-1]
+            folium.Marker(
+                location=[current_lat, current_lon],
+                popup=f"現在位置<br>時刻: {pos['time']}<br>衛星数: {pos['satellites']}",
+                icon=folium.Icon(color='red')
+            ).add_to(m)
+        
+        # 地図のHTMLを保存
+        st.session_state.map_html = m._repr_html_()
+        st.session_state.last_data_count = current_data_count
     
-    # 経路をラインで描画
-    if len(df) > 1:
-        import folium
-        route_coords = [[row['latitude'], row['longitude']] for _, row in df.iterrows()]
-        folium.PolyLine(
-            route_coords,
-            color='blue',
-            weight=3,
-            opacity=0.7,
-            popup='GPS経路'
-        ).add_to(m)
+    # 保存された地図HTMLを表示
+    st.components.v1.html(st.session_state.map_html, height=600)
     
-    # 開始地点マーカー
-    if len(df) > 0:
-        import folium
-        first_point = df.iloc[0]
-        folium.Marker(
-            location=[first_point['latitude'], first_point['longitude']],
-            popup=f"開始地点<br>時刻: {first_point['time']}",
-            icon=folium.Icon(color='green')
-        ).add_to(m)
-    
-    # 現在位置マーカー
-    if st.session_state.current_position:
-        import folium
-        folium.Marker(
-            location=[center_lat, center_lon],
-            popup=f"現在位置<br>時刻: {pos['time']}<br>衛星数: {pos['satellites']}",
-            icon=folium.Icon(color='red')
-        ).add_to(m)
-    
-    # 地図を表示
-    m.to_streamlit(height=600)
+    # 地図の状態をリセットするボタン
+    col_reset1, col_reset2 = st.columns([1, 4])
+    with col_reset1:
+        if st.button("🎯 現在位置に移動"):
+            st.session_state.map_center = [df['latitude'].iloc[-1], df['longitude'].iloc[-1]]
+            st.session_state.map_zoom = 17
+            st.session_state.map_html = None
+            st.rerun()
     
     # 統計情報
     st.markdown("### 📈 統計情報")
