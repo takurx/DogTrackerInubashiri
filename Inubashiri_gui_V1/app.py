@@ -226,31 +226,34 @@ if len(st.session_state.gps_data) > 0:
     
     # 経路をラインで描画
     if len(df) > 1:
+        import folium
         route_coords = [[row['latitude'], row['longitude']] for _, row in df.iterrows()]
-        m.add_polyline(
+        folium.PolyLine(
             route_coords,
             color='blue',
             weight=3,
             opacity=0.7,
             popup='GPS経路'
-        )
+        ).add_to(m)
     
     # 開始地点マーカー
     if len(df) > 0:
+        import folium
         first_point = df.iloc[0]
-        m.add_marker(
+        folium.Marker(
             location=[first_point['latitude'], first_point['longitude']],
             popup=f"開始地点<br>時刻: {first_point['time']}",
-            icon_color='green'
-        )
+            icon=folium.Icon(color='green')
+        ).add_to(m)
     
     # 現在位置マーカー
     if st.session_state.current_position:
-        m.add_marker(
+        import folium
+        folium.Marker(
             location=[center_lat, center_lon],
             popup=f"現在位置<br>時刻: {pos['time']}<br>衛星数: {pos['satellites']}",
-            icon_color='red'
-        )
+            icon=folium.Icon(color='red')
+        ).add_to(m)
     
     # 地図を表示
     m.to_streamlit(height=600)
