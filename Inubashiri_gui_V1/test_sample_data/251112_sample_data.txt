@@ -1,0 +1,7 @@
+heart beat counter: 1062
+heart beat counter: 1063
+$GPGGA,073345.00,3553.97034,N,13956.54343,E,2,10,0.90,49.1,M,39.6,M,,0000*656739,N,13956.53537,E,075509.00,A,D*6F
+heart beat counter: 1064
+heart beat counter: 1065/
+heart beat counter: 1066/
+

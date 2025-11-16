@@ -63,6 +63,9 @@ unsigned long previousMillis = 0;
 String nmeaBuffer = "";
 bool receivingNmea = false;
 
+String gpggaSentence = "";
+bool flag_gpgga_received = false;
+
 void setup() {
   Serial.begin(115200);
   delay(500);
@@ -77,15 +80,6 @@ void setup() {
 }
 
 void loop() {
-  currentMillis = millis();
-  if (currentMillis - previousMillis > 1000) {
-    // e220ttl.sendMessage("Hello, I'm transmitter side\n");
-    Serial.println("Sending heart beat counter: " + String(counter));
-    e220ttl.sendMessage("heart beat counter: " + String(counter++) + "\n");
-    // delay(1000);
-    previousMillis = currentMillis;
-  }
-
   // Check if data is available on Serial1
   if (Serial1.available() > 0) {
     char receivedChar = Serial1.read();
@@ -101,8 +95,10 @@ void loop() {
       
       // Check if it's a GPGGA sentence
       if (nmeaBuffer.startsWith("$GPGGA")) {
-        Serial.print(nmeaBuffer);
-        e220ttl.sendMessage(nmeaBuffer);
+        flag_gpgga_received = true;
+        gpggaSentence = nmeaBuffer;
+        // Serial.print(nmeaBuffer);
+        // e220ttl.sendMessage(nmeaBuffer);
       }
       
       // Reset for next sentence
@@ -115,6 +111,27 @@ void loop() {
     }
   }
 
+  currentMillis = millis();
+  if (currentMillis - previousMillis > 1000) {
+    Serial.println("currentMillis: " + String(currentMillis));
+    Serial.println("previousMillis: " + String(previousMillis));
+    // e220ttl.sendMessage("Hello, I'm transmitter side\n");
+    Serial.println("Sending heart beat counter: " + String(counter));
+    
+    if (flag_gpgga_received) {
+      e220ttl.sendMessage(gpggaSentence);
+      Serial.print(gpggaSentence);
+      gpggaSentence = "";
+      flag_gpgga_received = false;
+    } else {
+      // e220ttl.sendMessage("No GPGGA received yet, heart beat: " + String(counter) + "\n");
+    }
+    counter++;
+
+    previousMillis = currentMillis;
+  }
+
+  /*
   // If something available
   if (e220ttl.available() > 1) {
     Serial.println("Message received!");
@@ -137,4 +154,5 @@ void loop() {
 #endif
     }
   }
+  */
 }
